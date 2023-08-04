@@ -4,19 +4,21 @@ import Login from "./pages/login";
 import Chat from "./pages/chat";
 import { useEffect } from "react";
 import axios from "axios";
+import SetAvatar from "./pages/setAvatar";
 
 function App() {
   const navigate = useNavigate();
   useEffect(() => {
     if (localStorage.getItem("token")) {
       let token = localStorage.getItem("token");
-      console.log(token);
       (async function () {
         let verify = await axios.post("http://localhost:4242/api/verifyUser", {
           token: token,
         });
-        sessionStorage.setItem("userId", verify.data.id);
-        navigate("/chat");
+        if (verify) {
+          sessionStorage.setItem("userId", verify.data.id);
+          navigate("/chat");
+        } else navigate("/login");
       })();
     }
   }, []);
@@ -26,6 +28,7 @@ function App() {
         <Route index element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/setAvtar" element={<SetAvatar />} />
       </Routes>
     </>
   );

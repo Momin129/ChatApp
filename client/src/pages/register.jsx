@@ -145,7 +145,7 @@ function Register() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              error={error.username}
+              error={error.username == "" ? false : true}
               helperText={error.username}
               name="username"
               type="text"
@@ -158,7 +158,7 @@ function Register() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              error={error.email}
+              error={error.email == "" ? false : true}
               helperText={error.email}
               name="email"
               type="email"
@@ -171,7 +171,7 @@ function Register() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              error={error.password}
+              error={error.password == "" ? false : true}
               helperText={error.password}
               name="password"
               type="password"
@@ -184,7 +184,7 @@ function Register() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              error={error.confirmPassword}
+              error={error.confirmPassword == "" ? false : true}
               helperText={error.confirmPassword}
               name="confirmPassword"
               type="password"
