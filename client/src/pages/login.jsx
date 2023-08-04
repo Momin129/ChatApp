@@ -61,9 +61,10 @@ function Login() {
       axios
         .post(url, obj)
         .then((result) => {
-          console.log(typeof result.data.token, result.data.token);
           localStorage.setItem("token", result.data.token);
-          navigate("/chat");
+          sessionStorage.setItem("userId", result.data.id);
+          if (result.data.avatarImage === "") navigate("/setAvatar");
+          else navigate("/chat");
         })
         .catch((err) => {
           setMsg(err.response.data.message);

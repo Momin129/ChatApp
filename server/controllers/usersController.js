@@ -20,7 +20,7 @@ const registerUser = async (req, res) => {
 const validateCred = async (req, res) => {
   const username = req.body.username;
   const email = req.body.email;
-  console.log(username, email);
+
   if (username) {
     const checkUsername = await User.findOne({ username });
     if (checkUsername) res.status(400).json({ message: "username taken" });
@@ -40,13 +40,40 @@ const login = async (req, res) => {
   else {
     const isValid = await bcrypt.compare(password, isUser.password);
     if (isValid) {
-      res.status(200).json({ token: generateToken(isUser._id) });
+      res.status(200).json({
+        id: isUser._id,
+        avatarImage: isUser.avatarImage,
+        token: generateToken(isUser._id, isUser.avatarImage),
+      });
     } else res.status(400).json({ message: "Incorrect password" });
   }
 };
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "60d" });
+const getUserDetails = async (req, res) => {
+  const id = req.query.id;
+  const user = await User.findById(id);
+  if (user)
+    res
+      .status(200)
+      .json({ username: user.username, avatarImage: user.avatarImage });
+  else res.status(400).json({ message: "User not found" });
+};
+
+const setAvatarImage = async (req, res) => {
+  const { id, avatarImage } = req.body;
+
+  const avatar = await User.findByIdAndUpdate(
+    { _id: id },
+    { avatarImage: avatarImage }
+  );
+  if (avatar) res.status(200).json({ message: "Image updated Successfully." });
+  else res.status(400).json({ message: "Error updating avatar." });
+};
+
+const generateToken = (id, avatarImage) => {
+  return jwt.sign({ id, avatarImage }, process.env.JWT_SECRET, {
+    expiresIn: "60d",
+  });
 };
 
 const varifyUser = async (req, res) => {
@@ -54,4 +81,11 @@ const varifyUser = async (req, res) => {
   const decode = jwt.verify(token, process.env.JWT_SECRET);
   res.json(decode);
 };
-module.exports = { registerUser, validateCred, login, varifyUser };
+module.exports = {
+  registerUser,
+  validateCred,
+  login,
+  varifyUser,
+  setAvatarImage,
+  getUserDetails,
+};

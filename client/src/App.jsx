@@ -17,7 +17,8 @@ function App() {
         });
         if (verify) {
           sessionStorage.setItem("userId", verify.data.id);
-          navigate("/chat");
+          if (verify.data.avatarImage === "") navigate("/setAvatar");
+          else navigate("/chat");
         } else navigate("/login");
       })();
     }
@@ -28,7 +29,7 @@ function App() {
         <Route index element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/chat" element={<Chat />} />
-        <Route path="/setAvtar" element={<SetAvatar />} />
+        <Route path="/setAvatar" element={<SetAvatar />} />
       </Routes>
     </>
   );
