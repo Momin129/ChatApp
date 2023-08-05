@@ -13,10 +13,8 @@ export async function validateForm(name, value) {
       let result = await axios.post("http://localhost:4242/api/checkCred", {
         username: value,
       });
-      console.log(result);
     } catch (error) {
       msg = "*" + error.response.data.message;
-      console.log(error);
     }
   } else if (name == "email") {
     if (!value.match(/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/)) {
@@ -26,10 +24,8 @@ export async function validateForm(name, value) {
       let result = await axios.post("http://localhost:4242/api/checkCred", {
         email: value,
       });
-      console.log(result);
     } catch (error) {
       msg = "*" + error.response.data.message;
-      console.log(error);
     }
   } else if (name == "password") {
     if (value.length < 8) msg += `*atleast 8 characters.\n`;
@@ -41,6 +37,5 @@ export async function validateForm(name, value) {
     if (msg.length != 0) msg = "Password must contain\n" + msg;
   }
 
-  console.log(msg);
   return msg;
 }

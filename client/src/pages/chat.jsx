@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Contacts from "../components/chat/contacts";
 import MessageBox from "../components/chat/messageBox";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 
 const userId = sessionStorage.getItem("userId");
 
@@ -70,6 +71,14 @@ function Chat() {
           src={`data:image/svg+xml;utf8,${encodeURIComponent(avatar)}`}
           sx={{ width: 30, marginLeft: 1 }}
         ></Box>
+        <PowerSettingsNewIcon
+          sx={{ marginLeft: 5, cursor: "pointer" }}
+          onClick={() => {
+            localStorage.removeItem("token");
+            sessionStorage.removeItem("userId");
+            navigate("/");
+          }}
+        />
       </Box>
       <Box
         sx={{
