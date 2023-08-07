@@ -1,28 +1,27 @@
-import { Box, Button, Grid, Slide } from "@mui/material";
+import { Box, Fade, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Contacts from "../components/chat/contacts";
 import MessageBox from "../components/chat/messageBox";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
-
-const userId = sessionStorage.getItem("userId");
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { io } from "socket.io-client";
+import { useRef } from "react";
 
 function Chat() {
   const navigate = useNavigate();
-  const [checked, setChecked] = useState(false);
-  const [username, setUsername] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [chat, setChat] = useState(-1);
-
+  const userId = sessionStorage.getItem("userId");
+  const [user, setUser] = useState({});
+  const [chatBox, setChatBox] = useState(-1);
+  const [currentChat, setCurrentChat] = useState(null);
+  const [contacts, setContacts] = useState([]);
+  const socket = useRef();
   const showChat = () => {
-    console.log(chat);
-    if (chat == -1) {
-      setChat(1);
-      setChecked(true);
+    if (chatBox == -1) {
+      setChatBox(1);
     } else {
-      setChat(-1);
-      setChecked(false);
+      setChatBox(-1);
     }
   };
 
@@ -34,12 +33,21 @@ function Chat() {
           "http://localhost:4242/api/getuserdetails",
           { params: { id: userId } }
         );
-        setUsername(user.data.username);
-        setAvatar(user.data.avatarImage);
+        setUser(user.data);
+        const chats = await axios.get("http://localhost:4242/api/getChats", {
+          params: { id: userId },
+        });
+        setContacts(chats.data.filter);
       })();
     }
-  }, []);
+  }, [userId]);
 
+  useEffect(() => {
+    if (user) {
+      socket.current = io("http://localhost:4242");
+      socket.current.emit("add-user", userId);
+    }
+  }, [user]);
   return (
     <Box
       sx={{
@@ -65,10 +73,12 @@ function Chat() {
           margin: "0 auto",
         }}
       >
-        {username}
+        {user.username}
         <Box
           component={"img"}
-          src={`data:image/svg+xml;utf8,${encodeURIComponent(avatar)}`}
+          src={`data:image/svg+xml;utf8,${encodeURIComponent(
+            user.avatarImage
+          )}`}
           sx={{ width: 30, marginLeft: 1 }}
         ></Box>
         <PowerSettingsNewIcon
@@ -86,7 +96,7 @@ function Chat() {
           backgroundColor: "#1D267D",
           borderRadius: 5,
           boxShadow: 5,
-          width: { xs: 390, md: "60%" },
+          width: { xs: "95%", lg: "60%" },
           marginTop: 1,
         }}
       >
@@ -102,7 +112,11 @@ function Chat() {
               padding: 3,
             }}
           >
-            <Contacts showChat={showChat} />
+            <Contacts
+              showChat={showChat}
+              chats={contacts}
+              setCurrentChat={setCurrentChat}
+            />
           </Grid>
           <Grid
             item
@@ -112,14 +126,16 @@ function Chat() {
               display: { xs: "none", md: "block" },
               padding: 3,
               width: 1,
+              height: 1,
             }}
           >
-            <MessageBox />
+            <MessageBox chat={currentChat} user={user} socket={socket} />
           </Grid>
-          <Slide
-            direction="up"
-            in={checked}
-            style={{ transitionDelay: checked ? "500ms" : "0ms" }}
+          <Fade
+            in={chatBox == 1}
+            style={{
+              transitionDelay: chatBox == 1 ? "500ms" : "0ms",
+            }}
           >
             <Grid
               item
@@ -127,20 +143,18 @@ function Chat() {
               sx={{
                 display: { xs: "block", md: "none" },
                 position: "absolute",
-                zIndex: chat,
+                zIndex: chatBox,
                 height: "70%",
-                width: "95%",
+                width: "90%",
                 backgroundColor: "#1D267D",
                 borderRadius: 7,
                 padding: 1,
               }}
             >
-              <Button variant="contained" onClick={showChat}>
-                Close
-              </Button>
-              <MessageBox />
+              <KeyboardBackspaceIcon onClick={showChat} />
+              <MessageBox chat={currentChat} user={user} socket={socket} />
             </Grid>
-          </Slide>
+          </Fade>
         </Grid>
       </Box>
     </Box>

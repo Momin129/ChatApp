@@ -53,10 +53,26 @@ const getUserDetails = async (req, res) => {
   const id = req.query.id;
   const user = await User.findById(id);
   if (user)
-    res
-      .status(200)
-      .json({ username: user.username, avatarImage: user.avatarImage });
+    res.status(200).json({
+      id: user._id,
+      username: user.username,
+      avatarImage: user.avatarImage,
+    });
   else res.status(400).json({ message: "User not found" });
+};
+
+const getChats = async (req, res) => {
+  const id = req.query.id;
+  const chats = await User.find({ _id: { $ne: id } });
+  if (chats) {
+    const filter = chats.map((chat) => ({
+      id: chat._id,
+      username: chat.username,
+      avatarImage: chat.avatarImage,
+    }));
+
+    res.status(200).json({ filter });
+  } else res.status(400).json({ message: "something went wrong." });
 };
 
 const setAvatarImage = async (req, res) => {
@@ -88,4 +104,5 @@ module.exports = {
   varifyUser,
   setAvatarImage,
   getUserDetails,
+  getChats,
 };

@@ -2,10 +2,7 @@
 import { Box } from "@mui/material";
 
 export default function Contacts(props) {
-  const rows = [];
-  for (let i = 0; i < 40; i++) {
-    rows.push(i);
-  }
+  const rows = props.chats;
 
   return (
     <Box sx={{ height: 1 }}>
@@ -29,12 +26,24 @@ export default function Contacts(props) {
                 marginBottom: 1,
                 padding: 2,
                 borderRadius: 3,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor: "pointer",
               }}
               onClick={() => {
+                props.setCurrentChat(value);
                 props.showChat();
               }}
             >
-              testUser{value}
+              {value.username}
+              <Box
+                component={"img"}
+                src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                  value.avatarImage
+                )}`}
+                sx={{ width: 30, marginLeft: 1 }}
+              ></Box>
             </Box>
           );
         })}
