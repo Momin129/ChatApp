@@ -14,7 +14,6 @@ export default function InputFiled({ handleMessages }) {
         <Box
           sx={{
             position: "absolute",
-            left: { xs: 0, lg: 800 },
             zIndex: 1,
           }}
         >
@@ -22,7 +21,6 @@ export default function InputFiled({ handleMessages }) {
             data={data}
             previewPosition="none"
             onEmojiSelect={(e) => {
-              setPicker(!isPicker);
               setMsg(msg + e.native);
             }}
           />
@@ -50,6 +48,12 @@ export default function InputFiled({ handleMessages }) {
             "& .MuiOutlinedInput-input": { color: "white" },
           }}
           onChange={(e) => setMsg(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key == "Enter") {
+              handleMessages(msg);
+              setMsg("");
+            }
+          }}
         />
         <SendIcon
           onClick={() => {

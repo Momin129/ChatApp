@@ -3,11 +3,13 @@ import { Box, Typography } from "@mui/material";
 import InputFiled from "./inputFiled";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export default function MessageBox({ chat, user, socket }) {
   const [messages, setMessages] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const scrollRef = useRef();
+
   useEffect(() => {
     if (chat) {
       (async function () {
@@ -21,18 +23,24 @@ export default function MessageBox({ chat, user, socket }) {
           }
         );
         setMessages(response.data);
+        // onlineUsers.forEach((element) => {
+        //   if (element.userId.toString() === chat.id.toString())
+        //     setIsOnline(true);
+        // });
       })();
     }
   }, [chat, user.id]);
 
   useEffect(() => {
-    console.log(socket.current);
-    if (socket.current) {
-      socket.current.on("msg-recieve", (msg) => {
-        console.log(msg);
-        setArrivalMessage({ fromSelf: false, message: msg });
-      });
-    }
+    setTimeout(() => {
+      console.log(socket.current);
+      if (socket.current) {
+        socket.current.on("msg-recieve", (msg) => {
+          console.log(msg);
+          setArrivalMessage({ fromSelf: false, message: msg });
+        });
+      }
+    }, 1000);
   }, [socket]);
 
   useEffect(() => {
@@ -107,9 +115,9 @@ export default function MessageBox({ chat, user, socket }) {
               flexDirection: "column",
             }}
           >
-            {messages.map((message, index) => {
+            {messages.map((message) => {
               return (
-                <Box key={index} sx={{ marginTop: 1 }}>
+                <Box key={uuidv4()} sx={{ marginTop: 1 }}>
                   <Typography
                     sx={{
                       backgroundColor: message.fromSelf ? "#1D267D" : "black",

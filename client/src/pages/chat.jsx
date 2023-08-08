@@ -16,7 +16,8 @@ function Chat() {
   const [chatBox, setChatBox] = useState(-1);
   const [currentChat, setCurrentChat] = useState(null);
   const [contacts, setContacts] = useState([]);
-  const socket = useRef();
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  const socket = useRef(null);
   const showChat = () => {
     if (chatBox == -1) {
       setChatBox(1);
@@ -47,7 +48,12 @@ function Chat() {
       socket.current = io("http://localhost:4242");
       socket.current.emit("add-user", userId);
     }
-  }, [user]);
+    socket.current.on("get-users", (users) => {
+      setOnlineUsers(users);
+    });
+    console.log(onlineUsers);
+  }, [user, userId]);
+
   return (
     <Box
       sx={{
@@ -129,7 +135,12 @@ function Chat() {
               height: 1,
             }}
           >
-            <MessageBox chat={currentChat} user={user} socket={socket} />
+            <MessageBox
+              chat={currentChat}
+              user={user}
+              socket={socket}
+              onlineUsers={onlineUsers}
+            />
           </Grid>
           <Fade
             in={chatBox == 1}
@@ -152,7 +163,12 @@ function Chat() {
               }}
             >
               <KeyboardBackspaceIcon onClick={showChat} />
-              <MessageBox chat={currentChat} user={user} socket={socket} />
+              <MessageBox
+                chat={currentChat}
+                user={user}
+                socket={socket}
+                onlineUsers={onlineUsers}
+              />
             </Grid>
           </Fade>
         </Grid>

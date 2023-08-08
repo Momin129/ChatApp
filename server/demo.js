@@ -24,22 +24,26 @@ const io = socket(server, {
   },
 });
 
-global.onlineUser = [];
+global.onlineUsers = [];
 
 io.on("connection", (socket) => {
   global.chatSocket = socket;
   socket.on("add-user", (userId) => {
-    onlineUser.push({ userId: userId, socketId: socket.id });
-    io.emit("get-users", onlineUser);
-    console.log(onlineUser);
+    if (!onlineUsers.some((user) => user.userId === userId)) {
+      onlineUsers.push({ userId: userId, socketId: socket.id });
+      console.log("Online Users", onlineUsers);
+    }
+    io.emit("get-users", onlineUsers);
   });
 
   socket.on("send-msg", (data) => {
-    const sendUserSocket = onlineUser.filter((item) => {
-      if (item.userId === data.to) return item;
+    console.log("chat id", data.to, "onlineUsers", onlineUsers);
+    const sendUserSocket = onlineUsers.filter((item) => {
+      if (item.userId == data.to) return item;
     });
-    console.log("send", sendUserSocket);
-    if (sendUserSocket)
+    if (sendUserSocket) {
+      console.log("sendUserScoket", sendUserSocket, sendUserSocket[0].socketId);
       socket.to(sendUserSocket[0].socketId).emit("msg-recieve", data.message);
+    }
   });
 });
