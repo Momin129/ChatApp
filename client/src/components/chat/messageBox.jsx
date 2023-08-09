@@ -5,8 +5,9 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-export default function MessageBox({ chat, user, socket }) {
+export default function MessageBox({ chat, user, socket, onlineUsers }) {
   const [messages, setMessages] = useState([]);
+  const [isOnline, setIsOnline] = useState(false);
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const scrollRef = useRef();
 
@@ -23,17 +24,14 @@ export default function MessageBox({ chat, user, socket }) {
           }
         );
         setMessages(response.data);
-        // onlineUsers.forEach((element) => {
-        //   if (element.userId.toString() === chat.id.toString())
-        //     setIsOnline(true);
-        // });
+        if (onlineUsers.includes(chat.id)) setIsOnline(true);
+        else setIsOnline(false);
       })();
     }
-  }, [chat, user.id]);
+  }, [chat, user.id, onlineUsers]);
 
   useEffect(() => {
     setTimeout(() => {
-      console.log(socket.current);
       if (socket.current) {
         socket.current.on("msg-recieve", (msg) => {
           console.log(msg);
@@ -100,6 +98,15 @@ export default function MessageBox({ chat, user, socket }) {
                 chat.avatarImage
               )}`}
               sx={{ width: 30, marginLeft: 1 }}
+            ></Box>
+            <Box
+              sx={{
+                width: 10,
+                height: 10,
+                borderRadius: 5,
+                marginLeft: 1,
+                backgroundColor: isOnline ? "green" : "red",
+              }}
             ></Box>
           </Box>
 

@@ -51,9 +51,7 @@ function Chat() {
     socket.current.on("get-users", (users) => {
       setOnlineUsers(users);
     });
-    console.log(onlineUsers);
   }, [user, userId]);
-
   return (
     <Box
       sx={{
@@ -92,6 +90,7 @@ function Chat() {
           onClick={() => {
             localStorage.removeItem("token");
             sessionStorage.removeItem("userId");
+            socket.current.emit("remove-user", userId);
             navigate("/");
           }}
         />

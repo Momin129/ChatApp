@@ -82,11 +82,17 @@ const setAvatarImage = async (req, res) => {
     { _id: id },
     { avatarImage: avatarImage }
   );
-  if (avatar) res.status(200).json({ message: "Image updated Successfully." });
+  if (avatar)
+    res.status(200).json({
+      message: "Image updated Successfully.",
+      token: generateToken(avatar._id, avatar.avatarImage),
+    });
   else res.status(400).json({ message: "Error updating avatar." });
 };
 
 const generateToken = (id, avatarImage) => {
+  if (avatarImage == "") avatarImage = false;
+  else avatarImage = true;
   return jwt.sign({ id, avatarImage }, process.env.JWT_SECRET, {
     expiresIn: "60d",
   });

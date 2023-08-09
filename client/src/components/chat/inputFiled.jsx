@@ -14,6 +14,7 @@ export default function InputFiled({ handleMessages }) {
         <Box
           sx={{
             position: "absolute",
+            top: { xs: 0, md: "auto" },
             zIndex: 1,
           }}
         >

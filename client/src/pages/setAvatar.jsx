@@ -31,6 +31,7 @@ export default function SetAvatar() {
         id: userId,
         avatarImage: profile,
       });
+      localStorage.setItem("token", setImage.data.token);
       navigate("/chat");
       console.log(setImage);
     } catch (error) {

@@ -17,7 +17,7 @@ function App() {
         });
         if (verify) {
           sessionStorage.setItem("userId", verify.data.id);
-          if (verify.data.avatarImage === "") navigate("/setAvatar");
+          if (verify.data.avatarImage === false) navigate("/setAvatar");
           else navigate("/chat");
         } else navigate("/login");
       })();
