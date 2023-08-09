@@ -16,6 +16,7 @@ function App() {
           token: token,
         });
         if (verify) {
+          console.log(verify.data.avatarImage);
           sessionStorage.setItem("userId", verify.data.id);
           if (verify.data.avatarImage === false) navigate("/setAvatar");
           else navigate("/chat");

@@ -51,6 +51,7 @@ export default function InputFiled({ handleMessages }) {
           onChange={(e) => setMsg(e.target.value)}
           onKeyDown={(e) => {
             if (e.key == "Enter") {
+              setPicker(false);
               handleMessages(msg);
               setMsg("");
             }
@@ -58,6 +59,7 @@ export default function InputFiled({ handleMessages }) {
         />
         <SendIcon
           onClick={() => {
+            setPicker(false);
             handleMessages(msg);
             setMsg("");
           }}
