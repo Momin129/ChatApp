@@ -12,9 +12,12 @@ function App() {
     if (localStorage.getItem("token")) {
       let token = localStorage.getItem("token");
       (async function () {
-        let verify = await axios.post("http://localhost:4242/api/verifyUser", {
-          token: token,
-        });
+        let verify = await axios.post(
+          "https://chatapp-s6l0.onrender.com/api/verifyUser",
+          {
+            token: token,
+          }
+        );
         if (verify) {
           console.log(verify.data.avatarImage);
           sessionStorage.setItem("userId", verify.data.id);

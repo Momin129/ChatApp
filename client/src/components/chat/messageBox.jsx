@@ -15,7 +15,7 @@ export default function MessageBox({ chat, user, socket, onlineUsers }) {
     if (chat) {
       (async function () {
         const response = await axios.get(
-          "http://localhost:4242/api/getallmessage",
+          "https://chatapp-s6l0.onrender.com/api/getallmessage",
           {
             params: {
               from: user.id,
@@ -53,7 +53,7 @@ export default function MessageBox({ chat, user, socket, onlineUsers }) {
   }, [messages]);
 
   const handleMessages = async (msg) => {
-    await axios.post("http://localhost:4242/api/addmessage", {
+    await axios.post("https://chatapp-s6l0.onrender.com/api/addmessage", {
       from: user.id,
       to: chat.id,
       message: msg,

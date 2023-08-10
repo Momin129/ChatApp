@@ -56,7 +56,7 @@ function Login() {
         username: inputs.username,
         password: inputs.password,
       };
-      let url = "http://localhost:4242/api/login";
+      let url = "https://chatapp-s6l0.onrender.com/api/login";
 
       axios
         .post(url, obj)

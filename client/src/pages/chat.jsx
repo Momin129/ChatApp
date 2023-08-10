@@ -31,13 +31,16 @@ function Chat() {
     else {
       (async function () {
         const user = await axios.get(
-          "http://localhost:4242/api/getuserdetails",
+          "https://chatapp-s6l0.onrender.com/api/getuserdetails",
           { params: { id: userId } }
         );
         setUser(user.data);
-        const chats = await axios.get("http://localhost:4242/api/getChats", {
-          params: { id: userId },
-        });
+        const chats = await axios.get(
+          "https://chatapp-s6l0.onrender.com/api/getChats",
+          {
+            params: { id: userId },
+          }
+        );
         setContacts(chats.data.filter);
       })();
     }
@@ -45,7 +48,7 @@ function Chat() {
 
   useEffect(() => {
     if (user) {
-      socket.current = io("http://localhost:4242");
+      socket.current = io("https://chatapp-s6l0.onrender.com");
       socket.current.emit("add-user", userId);
     }
     socket.current.on("get-users", (users) => {

@@ -10,9 +10,12 @@ export async function validateForm(name, value) {
       msg = `*username should only contain: \nlower case\n numbers\n undescore`;
     }
     try {
-      let result = await axios.post("http://localhost:4242/api/checkCred", {
-        username: value,
-      });
+      let result = await axios.post(
+        "https://chatapp-s6l0.onrender.com/api/checkCred",
+        {
+          username: value,
+        }
+      );
     } catch (error) {
       msg = "*" + error.response.data.message;
     }
@@ -21,9 +24,12 @@ export async function validateForm(name, value) {
       msg = "*Invalid email.";
     }
     try {
-      let result = await axios.post("http://localhost:4242/api/checkCred", {
-        email: value,
-      });
+      let result = await axios.post(
+        "https://chatapp-s6l0.onrender.com/api/checkCred",
+        {
+          email: value,
+        }
+      );
     } catch (error) {
       msg = "*" + error.response.data.message;
     }

@@ -87,7 +87,7 @@ function Register() {
       email: inputs.email,
       password: inputs.password,
     };
-    let url = "http://localhost:4242/api/register";
+    let url = "https://chatapp-s6l0.onrender.com/api/register";
 
     axios
       .post(url, obj)

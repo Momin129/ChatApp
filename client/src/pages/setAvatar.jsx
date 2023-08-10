@@ -27,10 +27,13 @@ export default function SetAvatar() {
     const userId = sessionStorage.getItem("userId");
     const profile = avatar[selectedIndex].data;
     try {
-      const setImage = await axios.post("http://localhost:4242/api/setAvatar", {
-        id: userId,
-        avatarImage: profile,
-      });
+      const setImage = await axios.post(
+        "https://chatapp-s6l0.onrender.com/api/setAvatar",
+        {
+          id: userId,
+          avatarImage: profile,
+        }
+      );
       localStorage.setItem("token", setImage.data.token);
       navigate("/chat");
       console.log(setImage);
