@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Avatar from "../components/Avatar";
 import { useNavigate } from "react-router-dom";
+import { host } from "../utils/host";
 
 export default function SetAvatar() {
   const navigate = useNavigate();
@@ -27,14 +28,12 @@ export default function SetAvatar() {
     const userId = sessionStorage.getItem("userId");
     const profile = avatar[selectedIndex].data;
     try {
-      const setImage = await axios.post(
-        "https://chatapp-s6l0.onrender.com/api/setAvatar",
-        {
-          id: userId,
-          avatarImage: profile,
-        }
-      );
+      const setImage = await axios.post(`${host}/api/setAvatar`, {
+        id: userId,
+        avatarImage: profile,
+      });
       localStorage.setItem("token", setImage.data.token);
+      sessionStorage.setItem("userId", setImage.data.id);
       navigate("/chat");
       console.log(setImage);
     } catch (error) {

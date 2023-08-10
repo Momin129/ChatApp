@@ -4,6 +4,7 @@ import InputFiled from "./inputFiled";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { host } from "../../utils/host";
 
 export default function MessageBox({ chat, user, socket, onlineUsers }) {
   const [messages, setMessages] = useState([]);
@@ -14,15 +15,12 @@ export default function MessageBox({ chat, user, socket, onlineUsers }) {
   useEffect(() => {
     if (chat) {
       (async function () {
-        const response = await axios.get(
-          "https://chatapp-s6l0.onrender.com/api/getallmessage",
-          {
-            params: {
-              from: user.id,
-              to: chat.id,
-            },
-          }
-        );
+        const response = await axios.get(`${host}/api/getallmessage`, {
+          params: {
+            from: user.id,
+            to: chat.id,
+          },
+        });
         setMessages(response.data);
         if (onlineUsers.includes(chat.id)) setIsOnline(true);
         else setIsOnline(false);
@@ -53,7 +51,7 @@ export default function MessageBox({ chat, user, socket, onlineUsers }) {
   }, [messages]);
 
   const handleMessages = async (msg) => {
-    await axios.post("https://chatapp-s6l0.onrender.com/api/addmessage", {
+    await axios.post(`${host}/api/addmessage`, {
       from: user.id,
       to: chat.id,
       message: msg,

@@ -93,6 +93,7 @@ const setAvatarImage = async (req, res) => {
 const generateToken = (id, avatarImage) => {
   if (avatarImage == "") avatarImage = false;
   else avatarImage = true;
+  console.log(avatarImage);
   return jwt.sign({ id, avatarImage }, process.env.JWT_SECRET, {
     expiresIn: "60d",
   });

@@ -5,6 +5,7 @@ import Chat from "./pages/chat";
 import { useEffect } from "react";
 import axios from "axios";
 import SetAvatar from "./pages/setAvatar";
+import { host } from "./utils/host";
 
 function App() {
   const navigate = useNavigate();
@@ -12,12 +13,9 @@ function App() {
     if (localStorage.getItem("token")) {
       let token = localStorage.getItem("token");
       (async function () {
-        let verify = await axios.post(
-          "https://chatapp-s6l0.onrender.com/api/verifyUser",
-          {
-            token: token,
-          }
-        );
+        let verify = await axios.post(`${host}/api/verifyUser1`, {
+          token: token,
+        });
         if (verify) {
           console.log(verify.data.avatarImage);
           sessionStorage.setItem("userId", verify.data.id);

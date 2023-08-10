@@ -8,6 +8,7 @@ import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { io } from "socket.io-client";
 import { useRef } from "react";
+import { host } from "../utils/host";
 
 function Chat() {
   const navigate = useNavigate();
@@ -30,17 +31,13 @@ function Chat() {
     if (userId === undefined) navigate("/login");
     else {
       (async function () {
-        const user = await axios.get(
-          "https://chatapp-s6l0.onrender.com/api/getuserdetails",
-          { params: { id: userId } }
-        );
+        const user = await axios.get(`${host}/api/getuserdetails`, {
+          params: { id: userId },
+        });
         setUser(user.data);
-        const chats = await axios.get(
-          "https://chatapp-s6l0.onrender.com/api/getChats",
-          {
-            params: { id: userId },
-          }
-        );
+        const chats = await axios.get(`${host}/api/getChats`, {
+          params: { id: userId },
+        });
         setContacts(chats.data.filter);
       })();
     }
@@ -48,7 +45,7 @@ function Chat() {
 
   useEffect(() => {
     if (user) {
-      socket.current = io("https://chatapp-s6l0.onrender.com");
+      socket.current = io(`${host}`);
       socket.current.emit("add-user", userId);
     }
     socket.current.on("get-users", (users) => {

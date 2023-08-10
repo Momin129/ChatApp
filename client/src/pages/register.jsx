@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { validateForm } from "../utils/formValidation";
 import axios from "axios";
+import { host } from "../utils/host";
 
 const inputProps = {
   input: { color: "white" },
@@ -87,7 +88,7 @@ function Register() {
       email: inputs.email,
       password: inputs.password,
     };
-    let url = "https://chatapp-s6l0.onrender.com/api/register";
+    let url = `${host}/api/register`;
 
     axios
       .post(url, obj)
