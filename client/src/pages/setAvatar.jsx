@@ -33,7 +33,6 @@ export default function SetAvatar() {
         avatarImage: profile,
       });
       localStorage.setItem("token", setImage.data.token);
-      sessionStorage.setItem("userId", setImage.data.id);
       navigate("/chat");
       console.log(setImage);
     } catch (error) {

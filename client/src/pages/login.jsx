@@ -64,7 +64,7 @@ function Login() {
         .then((result) => {
           localStorage.setItem("token", result.data.token);
           sessionStorage.setItem("userId", result.data.id);
-          if (result.data.avatarImage === "") navigate("/setAvatar");
+          if (result.data.avatarImage === false) navigate("/setAvatar");
           else navigate("/chat");
         })
         .catch((err) => {

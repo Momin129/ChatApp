@@ -13,7 +13,7 @@ function App() {
     if (localStorage.getItem("token")) {
       let token = localStorage.getItem("token");
       (async function () {
-        let verify = await axios.post(`${host}/api/verifyUser1`, {
+        let verify = await axios.post(`${host}/api/verifyUser`, {
           token: token,
         });
         if (verify) {

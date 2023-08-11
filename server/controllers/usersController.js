@@ -39,11 +39,15 @@ const login = async (req, res) => {
   if (!isUser) res.status(400).json({ message: "Invalid username." });
   else {
     const isValid = await bcrypt.compare(password, isUser.password);
+
     if (isValid) {
+      let avatarImage;
+      if (isUser.avatarImage == "") avatarImage = false;
+      else avatarImage = true;
       res.status(200).json({
         id: isUser._id,
-        avatarImage: isUser.avatarImage,
-        token: generateToken(isUser._id, isUser.avatarImage),
+        avatarImage: avatarImage,
+        token: generateToken(isUser._id, avatarImage),
       });
     } else res.status(400).json({ message: "Incorrect password" });
   }
@@ -82,18 +86,19 @@ const setAvatarImage = async (req, res) => {
     { _id: id },
     { avatarImage: avatarImage }
   );
-  if (avatar)
+  if (avatar) {
+    const isAvatarImage = User.findById(id).select("avatarImage");
+    let avatarImage;
+    if (isAvatarImage == "") avatarImage = false;
+    else avatarImage = true;
     res.status(200).json({
       message: "Image updated Successfully.",
-      token: generateToken(avatar._id, avatar.avatarImage),
+      token: generateToken(avatar._id, avatarImage),
     });
-  else res.status(400).json({ message: "Error updating avatar." });
+  } else res.status(400).json({ message: "Error updating avatar." });
 };
 
 const generateToken = (id, avatarImage) => {
-  if (avatarImage == "") avatarImage = false;
-  else avatarImage = true;
-  console.log(avatarImage);
   return jwt.sign({ id, avatarImage }, process.env.JWT_SECRET, {
     expiresIn: "60d",
   });
