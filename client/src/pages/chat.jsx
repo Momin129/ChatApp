@@ -44,6 +44,7 @@ function Chat() {
   }, [userId]);
 
   useEffect(() => {
+    
     if (user) {
       socket.current = io(`${host}`, {
         withCredentials: true,

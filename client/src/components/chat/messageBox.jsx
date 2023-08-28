@@ -29,12 +29,14 @@ export default function MessageBox({ chat, user, socket, onlineUsers }) {
   }, [chat, user.id, onlineUsers]);
 
   useEffect(() => {
-    if (socket.current) {
-      socket.current.on("msg-recieve", (msg) => {
-        console.log(msg);
-        setArrivalMessage({ fromSelf: false, message: msg });
-      });
-    }
+    setTimeout(() => {
+      if (socket.current) {
+        socket.current.on("msg-recieve", (msg) => {
+          console.log(msg);
+          setArrivalMessage({ fromSelf: false, message: msg });
+        });
+      }
+    }, 500);
   }, [socket]);
 
   useEffect(() => {
